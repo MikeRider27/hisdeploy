@@ -1,0 +1,115 @@
+server {
+    listen       80;
+    server_name  {{ .Env.HIS_SUB_DOMAIN }}.{{ .Env.DOMAIN_NAME }};
+    error_page   500 502 503 504  /50x.html;
+    location =  /50x.html {
+        root    /usr/share/nginx/html;
+    }
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 127.0.0.1:80;
+    server_name 127.0.0.1;
+    location /nginx_status {
+        stub_status on;
+        allow 127.0.0.1;
+        deny all;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name {{ .Env.HIS_SUB_DOMAIN }}.{{ .Env.DOMAIN_NAME }};
+    server_tokens off;
+    ssl_certificate {{ .Env.CERT_PATH }}/{{ .Env.CERT_NAME }};
+    ssl_certificate_key {{ .Env.CERT_PATH }}/{{ .Env.KEY_NAME }};
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+    {{ if .Env.OUT_WAR_NAME }}
+    location = / {
+        return 301 https://$host/{{ .Env.OUT_WAR_NAME }};
+    }
+
+    location /{{ .Env.OUT_WAR_NAME }} {
+        proxy_pass http://localhost:8080;
+        proxy_http_version 1.1;
+        proxy_set_header  Host $host;
+        proxy_set_header  X-Real-IP $remote_addr;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_set_header  X-Forwarded-For $remote_addr;
+        proxy_set_header  X-Forwarded-Host $remote_addr;
+        proxy_set_header secret $http_secret;
+        proxy_read_timeout 1d;
+        proxy_send_timeout 1d;
+
+        limit_conn conn_limit_per_ip 100; # 100 connections per IP
+        #100 requests per second per IP
+        limit_req zone=req_limit_per_ip burst=100 nodelay;
+    }
+    location /outhis-manager {
+        client_max_body_size 100M;
+        proxy_pass http://localhost:8080/outhis-manager;
+        proxy_pass_header Authorization;
+        proxy_set_header Authorization $http_authorization;
+    }
+    location ~ /{{ .Env.OUT_WAR_NAME }}/(dist|assets) {
+        root /usr/share/nginx;
+        expires 30d;
+    }
+    {{ end }}
+
+    {{ if .Env.INT_WAR_NAME }}
+    location /{{ .Env.INT_WAR_NAME }} {
+        proxy_pass http://localhost:9080;
+        proxy_http_version 1.1;
+        proxy_set_header  Host $host;
+        proxy_set_header  X-Real-IP $remote_addr;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_set_header  X-Forwarded-For $remote_addr;
+        proxy_set_header  X-Forwarded-Host $remote_addr;
+        proxy_read_timeout 1d;
+        proxy_send_timeout 1d;
+
+        # limit_conn conn_limit_per_ip 5; # 5 connections per IP
+        # 5 requests per second per IP
+        # limit_req zone=req_limit_per_ip burst=5 nodelay;
+    }
+    location /interhis-manager {
+        client_max_body_size 100M;
+        proxy_pass http://localhost:9080/interhis-manager;
+        proxy_pass_header Authorization;
+        proxy_set_header Authorization $http_authorization;
+    }
+    location ~ /{{ .Env.INT_WAR_NAME }}/(dist|assets) {
+        root /usr/share/nginx;
+        expires 30d;
+    }
+    location /asr {
+        proxy_pass https://hisag.mspbs.gov.py;
+        proxy_http_version 1.1;
+
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+    {{ end }}
+    
+    {{ if .Env.HAPI_WAR_NAME }}
+    location /{{ .Env.HAPI_WAR_NAME }} {
+        proxy_pass http://localhost:7080;
+        proxy_http_version 1.1;
+        proxy_set_header  Host $host;
+        proxy_set_header  X-Real-IP $remote_addr;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_set_header  X-Forwarded-For $remote_addr;
+        proxy_set_header  X-Forwarded-Host $remote_addr;
+        proxy_read_timeout 1d;
+        proxy_send_timeout 1d;
+    }
+    location ^~/{{ .Env.HAPI_WAR_NAME }}/(dist|assets) {
+        root /usr/share/nginx;
+        expires 30d;
+    }
+    {{ end }}
+}

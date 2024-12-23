@@ -1,0 +1,11 @@
+nginx/interhis_root/*
+!nginx/interhis_root/.gitkeep
+
+.his.prod.env
+docker-compose.yml
+*.war
+*.sql
+postgres/config/postgresql.conf
+
+tomcat-users.xml
+postgres/bin/pubkey.age

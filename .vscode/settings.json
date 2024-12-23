@@ -1,0 +1,6 @@
+{
+    "files.exclude": {
+        "**/.git": false
+   },
+    "markdown.extension.toc.updateOnSave": true,
+}

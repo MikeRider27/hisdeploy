@@ -1,0 +1,347 @@
+--Replace All codigo_establecimiento for a new user - sysadmin and the password - 123
+
+CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
+
+-- create the get_nombre_server function
+CREATE OR REPLACE FUNCTION public.get_nombre_server()
+ RETURNS text
+ LANGUAGE plpgsql
+AS $function$
+declare
+	nombre_server text;
+BEGIN
+   SELECT '{{ .Env.HOSP_NAME }}' INTO nombre_server;
+   RETURN nombre_server;
+END;
+$function$
+;
+
+--create user
+INSERT INTO usuario( codigo_usuario, contrasenha, nombres, apellidos, descripcion, estado, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HIS_ADMIN_NAME }}', md5('{{ .Env.HIS_ADMIN_PASS }}'), 'Super', 'Admin',  'system admin', '1', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}' );
+INSERT INTO usuario( codigo_usuario, contrasenha, nombres, apellidos, descripcion, estado, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('postman', md5('*checkbot*'), 'Postman', 'System Status Checking Bot',  'ICDF PY-HIS Made', '1', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}' );
+
+--assign user to hospital
+INSERT INTO establecimiento_usuario( codigo_establecimiento, codigo_usuario, creacion_fecha, creacion_hora, creacion_usuario)
+VALUES ('{{ .Env.HOSP_ID }}', '{{ .Env.HIS_ADMIN_NAME }}', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO establecimiento_usuario( codigo_establecimiento, codigo_usuario, creacion_fecha, creacion_hora, creacion_usuario)
+VALUES ('{{ .Env.HOSP_ID }}', 'postman', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+
+--assign user all the roles
+INSERT INTO usuario_rol( codigo_establecimiento, codigo_usuario, codigo_rol, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '{{ .Env.HIS_ADMIN_NAME }}', '00001', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO usuario_rol( codigo_establecimiento, codigo_usuario, codigo_rol, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '{{ .Env.HIS_ADMIN_NAME }}', '00002', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO usuario_rol( codigo_establecimiento, codigo_usuario, codigo_rol, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '{{ .Env.HIS_ADMIN_NAME }}', '00003', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO usuario_rol( codigo_establecimiento, codigo_usuario, codigo_rol, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '{{ .Env.HIS_ADMIN_NAME }}', '00004', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO usuario_rol( codigo_establecimiento, codigo_usuario, codigo_rol, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '{{ .Env.HIS_ADMIN_NAME }}', '00005', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO usuario_rol( codigo_establecimiento, codigo_usuario, codigo_rol, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '{{ .Env.HIS_ADMIN_NAME }}', '00006', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO usuario_rol( codigo_establecimiento, codigo_usuario, codigo_rol, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '{{ .Env.HIS_ADMIN_NAME }}', '00007', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO usuario_rol( codigo_establecimiento, codigo_usuario, codigo_rol, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '{{ .Env.HIS_ADMIN_NAME }}', '00008', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO usuario_rol( codigo_establecimiento, codigo_usuario, codigo_rol, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '{{ .Env.HIS_ADMIN_NAME }}', '00009', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO usuario_rol( codigo_establecimiento, codigo_usuario, codigo_rol, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '{{ .Env.HIS_ADMIN_NAME }}', '00012', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO usuario_rol( codigo_establecimiento, codigo_usuario, codigo_rol, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '{{ .Env.HIS_ADMIN_NAME }}', '00013', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO usuario_rol( codigo_establecimiento, codigo_usuario, codigo_rol, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '{{ .Env.HIS_ADMIN_NAME }}', '00014', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO usuario_rol( codigo_establecimiento, codigo_usuario, codigo_rol, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '{{ .Env.HIS_ADMIN_NAME }}', '00015', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO usuario_rol( codigo_establecimiento, codigo_usuario, codigo_rol, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '{{ .Env.HIS_ADMIN_NAME }}', '00016', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+
+
+--assign all the roles to hospital
+INSERT INTO rol(codigo_establecimiento, codigo_rol, nombre_rol, descripcion, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00001', 'ADMISION', 'Es el procedimiento de registro de pacientes que requirieron de un servicio hospitalario.', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol(codigo_establecimiento, codigo_rol, nombre_rol, descripcion, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00002', 'PRECONSULTA', 'Valoracion medica preliminar de acuerdo a los criterios de admision establecidos.', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol(codigo_establecimiento, codigo_rol, nombre_rol, descripcion, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00003', 'CONSULTA', 'Consiste en la atencion medica al paciente, sea externa, en urgencias o extramural.', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol(codigo_establecimiento, codigo_rol, nombre_rol, descripcion, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00004', 'FARMACIA', 'Area que se encarga de la entrega de medicamentos a los pacientes.', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol(codigo_establecimiento, codigo_rol, nombre_rol, descripcion, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00005', 'LABORATORIO', 'Dpto. donde se analizan muestras biologicas', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol(codigo_establecimiento, codigo_rol, nombre_rol, descripcion, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00006', 'SYSADMIN', 'Administrador del sistema.', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol(codigo_establecimiento, codigo_rol, nombre_rol, descripcion, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00007', 'HORARIO', 'Gestión de Horario de Médicos.', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol(codigo_establecimiento, codigo_rol, nombre_rol, descripcion, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00008', 'REPORTE', 'Generar informes automáticamente.', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol(codigo_establecimiento, codigo_rol, nombre_rol, descripcion, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00009', 'PANTALLA', 'Pantalla', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol(codigo_establecimiento, codigo_rol, nombre_rol, descripcion, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00012', 'AGENDA', 'Agenda', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol(codigo_establecimiento, codigo_rol, nombre_rol, descripcion, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00013', 'HISTORIAL', 'Historial', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol(codigo_establecimiento, codigo_rol, nombre_rol, descripcion, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00014', 'SEGUIMIENTO', 'Seguimiento de pacientes', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol(codigo_establecimiento, codigo_rol, nombre_rol, descripcion, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00015', 'PROCEDIMIENTO', 'Procedimiento', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol(codigo_establecimiento, codigo_rol, nombre_rol, descripcion, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00016', 'REPORTE VIGILANCIA', 'Reporte de Vigilancia', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+
+
+--assign all the permisos to roles
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00001', '01000', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00001', '01001', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00001', '01002', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00001', '01003', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00001', '01004', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00002', '02000', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00002', '02001', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00002', '02002', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00003', '03000', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00003', '03001', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00003', '03002', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00004', '04000', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00004', '04001', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00004', '04002', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00004', '04003', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00005', '05000', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00005', '05001', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00006', '06000', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00006', '06001', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00006', '06005', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00006', '06007', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00006', '06008', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00006', '06012', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00006', '06013', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00006', '06014', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00006', '06015', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00006', '06016', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00006', '06017', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00006', '06018', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00007', '07000', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00007', '07001', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00008', '08000', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00008', '08001', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00008', '08002', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00008', '08003', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00008', '08004', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00008', '08005', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00008', '08006', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00008', '08007', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00008', '08008', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00008', '08009', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00008', '08010', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00008', '08011', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00008', '08012', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00008', '08013', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00008', '08014', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00008', '08015', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00008', '08016', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00009', '09000', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00009', '09001', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00012', '12000', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00012', '12001', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00013', '13000', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00013', '13001', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00014', '14000', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00014', '14001', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00015', '15000', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00015', '15001', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00016', '16000', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO rol_permiso( codigo_establecimiento, codigo_rol, codigo_permiso, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', '00016', '16001', now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+
+
+--assign all the permisos links to hospital
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','01000','admision','Admisión','0','0',0,1,'',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','02000','preconsulta','Preconsulta','0','0',0,2,'',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','03000','consulta','Consulta','0','0',0,3,'',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','04000','farmacia','Farmacia','0','0',0,4,'',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','05000','laboratorio','Laboratorio','0','0',0,5,'',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','06000','sysadmin','Administración del Sistema','0','0',0,6,'',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','07000','horario','Horario','0','0',0,7,'',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','08000','reporte','Reportes','0','0',0,8,'',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','09000','pantalla','Pantalla','0','0',0,9,'',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','12000','agenda','Agenda','0','0',0,12,'',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','13000','historial','Historial','0','0',0,13,'',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','14000','seguimiento', 'Seguimiento','0','0',0,14,'',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','15000','procedimiento', 'Procedimiento','0','0',0,15,'',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','16000','vigilancia', 'Vigilancia','0','0',0,16,'',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','01001','buscar','Buscar','0','01000',1,1,'/admision/prompt',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','01002','horario_medico','Horario de Profesionales','0','01000',1,2,'/admision/selHorarios',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','01003','agenda','Agenda','0','01000',1,3,'/admision/agenda',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','01004','lista_agenda_evento_anormal','Agendados a revisar','0','01000',1,4,'/admision/agendaEventoAnormal',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','02001','Lista de Pacientes','Lista de Pacientes','0','02000',1,1,'/preconsulta/prompt',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','02002','Horario de Medicos','Horario de Profesionales','0','02000',1,2,'/admision/selHorarios',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','03001','Lista de Pacientes','Lista de Pacientes','0','03000',1,1,'/consulta/prompt',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','03002','Lista de Pacientes de Urgencias','Lista de Pacientes de Urgencias','0','03000',1,2,'/consulta/listaUrgencias',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','04001','listaPaciente','Lista de Pacientes','0','04000',1,1,'/farmacia/listaPaciente',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','04002','historial','Historial','0','04000',1,2,'/farmacia/listaPacientes',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','04003','stock','Stock','0','04000',1,3,'/farmacia/stock',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','05001','laboratorio','Laboratorio','0','05000',1,1,'/laboratorio/laboratorioList',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','06001','listar_usuarios','Listar Usuarios','0','06000',1,1,'/usuario/listaUsuario',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','06005','medicos','Listar Profesionales','0','06000',1,5,'/profesional/profesional',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','06007','usuario_rol','Asignar Roles a Usuarios','0','06000',1,7,'/sysadmin/usuarios_roles',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','06008','hospital_usuario','Asignar Hospital a Usuario','0','06000',1,8,'/sysadmin/hospital_usuario',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','06012','horario','Horario','0','06000',1,12,'/admision/horario',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','06013','pantalla','Pantalla','0','06000',1,13,'/pantalla/setPantalla',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','06014','notificar','Notificar Usuario','0','06000',1,14,'/sysadmin/notice',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','06015','emergency_numbers','Registrar Números de Emergencia','0','06000',1,15,'/sysadmin/emergency_numbers',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','06016','historial','Historial','0','06000',1,16,'/farmacia/consulta_listaPacientesV2',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','06017','vidmapping','Mapear ID Virtual','0','06000',1,17,'/sysadmin/vidmapping',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','06018','reporte_grafico','Reporte Grafico','0','06000',1,18,'/sysadmin/reporte_grafico',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','07001','horario', 'Horario','0','07000',1,1,'/admision/horario',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','08001','reporte_medicos', 'Uso del sistema: Profesional','0','08000',1,1,'/reporte/Reporte_medicos',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','08002','report_enfermeras', 'Uso del sistema: Enfermería','0','08000',1,2,'/reporte/Reporte_enfermeras',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','08003','report_pacientesPorDia', 'Paciente diarios por tipo de documentos','0','08000',1,3,'/reporte/Reporte_PacientesPorDia',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','08004','report_enfermedadRanking', 'Enfermedades principales','0','08000',1,4,'/reporte/Reporte_enfermedadRanking',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','08005','report_pacientesGrupoEtario', 'Cantidad de pacientes por grupo etario','0','08000',1,5,'/reporte/Reporte_pacientesGrupoEtario',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','08006','report_datosDetallados', 'Registro Diario de Consultas','0','08000',1,6,'/reporte/Reporte_datosdetallados',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','08007','informe_mensual', 'Informe Mensual del Sistema','0','08000',1,7,'/reporte/Reporte_informeMensual',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','08008','report_enfermedad', 'Cantidad de pacientes por enfermedad','0','08000',1,8,'/reporte/Reporte_enfermedad',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','08009','report_enfermedades_notificación_obligatoria', 'Enfermedades de Notificación Obligatoria','0','08000',1,9,'/reporte/Reporte_grupos_quinquenales_edad',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','08010','buscar_enfermedad','Localización de pacientes por enfermedad','0','08000',1,10,'/reporte/Buscar_numero_enfermedad',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','08011','reporte_medicamentos', 'Consumo de Medicamentos','0','08000',1,11,'/reporte/Reporte_Medicamentos',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','08012','reporte_farmacia', 'Uso del sistema : Farmacia','0','08000',1,12,'/reporte/Reporte_Farmacia',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','08013','Reporte_porcentual_sexo', 'Porcentual de Consultas segun sexo','0','08000',1,13,'/reporte/Reporte_porcentual_sexo',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','08014','lista_formularios_obligatorio', 'Lista de Formularios Obligatorios','0','08000',1,14,'/sysadmin/form_obligatorio_lista',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{.Env.HOSP_ID}}','08015','reporte_procedimientos', 'Uso del sistema: Procedimiento','0','08000',1,15,'/sysadmin/Reporte_Procedimientos',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{.Env.HOSP_ID}}','08016','reporte_procedimientos_principales', 'Procedimientos Principales','0','08000',1,16,'/sysadmin/Reporte_procedimientoRanking',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','09001','pantalla', 'Ejecutar la función de pantalla','0','09000',1,1,'/pantalla/setPantalla',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','12001','agenda', 'Agenda','0','12000',1,1,'/admision/agenda',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','13001','historial', 'Historial de paciente','0','13000',1,1,'/farmacia/consulta_listaPacientesV2',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','14001','seguimiento de pacientes', 'Lista de pacientes en seguimiento','0','14000',1,1,'/sysadmin/sospechosos_lista',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','15001','procedimiento', 'Procedimiento','0','15000',1,1,'/procedimiento/promt',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO permiso( codigo_establecimiento, codigo_permiso, nombre_permiso, abreviacion_permiso, codigo_grupo, codigo_grupo_nombre, nivel, orden, url, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}','16001','vigilancia', 'Vigilancia','0','16000',1,1,'/reporte/reporte_vigilancia_edad',now()::date, to_char(now(),'HH:MI:SS')::TIME, '{{ .Env.HIS_ADMIN_NAME }}');
+
+
+--add the indicadores for hospital
+INSERT INTO indicadores (codigo_establecimiento, codigo_indicadores, abreviacion_indicadores, nombre_indicadores, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', 1, 'reciennacido', 'Indicadores para Recien nacido', now()::date,to_char(now(),'HH:MI:SS')::TIME,'{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO indicadores (codigo_establecimiento, codigo_indicadores, abreviacion_indicadores, nombre_indicadores, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', 2, 'embarazada', 'Indicadores para Embarazada', now()::date,to_char(now(),'HH:MI:SS')::TIME,'{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO indicadores (codigo_establecimiento, codigo_indicadores, abreviacion_indicadores, nombre_indicadores, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', 3, 'pani_ninos', 'PANI NIÑOS', now()::date,to_char(now(),'HH:MI:SS')::TIME,'{{ .Env.HIS_ADMIN_NAME }}');
+INSERT INTO indicadores (codigo_establecimiento, codigo_indicadores, abreviacion_indicadores, nombre_indicadores, creacion_fecha, creacion_hora, creacion_usuario )
+VALUES ('{{ .Env.HOSP_ID }}', 4, 'pani_embarazadas', 'PANI EMBARAZADA O POST PARTO', now()::date,to_char(now(),'HH:MI:SS')::TIME,'{{ .Env.HIS_ADMIN_NAME }}');

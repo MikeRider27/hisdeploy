@@ -1,0 +1,118 @@
+
+services:
+    nginx:
+        container_name: nginx
+        image: nginx:1.19.9-alpine
+        network_mode: "host"
+        volumes:
+            - ./nginx/conf.d:/etc/nginx/conf.d:ro
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./nginx/ssl/{{ .Env.CERT_NAME }}:{{ .Env.CERT_PATH }}/{{ .Env.CERT_NAME }}:ro
+            - ./nginx/ssl/{{ .Env.KEY_NAME }}:{{ .Env.CERT_PATH }}/{{ .Env.KEY_NAME }}:ro
+            - nginx_logs:/var/log/nginx:z
+        environment:
+            - TZ=America/Asuncion
+        depends_on:
+            {{ if .Env.OUT_WAR_NAME }}- outhis{{ end }}
+            {{ if .Env.INT_WAR_NAME }}- interhis{{ end }}
+        extra_hosts:
+            - {{ .Env.HISAG_DOMAIN }}:{{ .Env.HISAG_IP }}
+        restart: always
+    {{ if .Env.OUT_WAR_NAME }}
+    outhis:
+        container_name: outhis
+        build:
+            context: outpatient/.
+            dockerfile: Dockerfile
+        environment:
+            - TZ=America/Asuncion
+            - CATALINA_OPTS={{ .Env.CATALINA_OPTS }}
+        network_mode: "host"
+        volumes:
+            - outhis_logs:/usr/local/tomcat/logs
+            - outhis_apps:/usr/local/tomcat/webapps
+            - outhis_uploads:/usr/local/tomcat/images
+        extra_hosts:
+            - {{ .Env.HISAG_DOMAIN }}:{{ .Env.HISAG_IP }}
+            - proxy.incan.com:192.168.1.206
+        depends_on:
+            - postgres
+        restart: always
+    {{ end }}
+    {{ if .Env.INT_WAR_NAME }}
+    interhis:
+        container_name: interhis
+        build:
+            context: inpatient/.
+            dockerfile: Dockerfile
+        environment:
+            - TZ=America/Asuncion
+            - CATALINA_OPTS={{ .Env.CATALINA_OPTS }}
+        network_mode: "host"
+        volumes:
+            - interhis_logs:/usr/local/tomcat/logs
+            - interhis_apps:/usr/local/tomcat/webapps
+            - interhis_images:/usr/local/tomcat/images
+        extra_hosts:
+            - {{ .Env.HISAG_DOMAIN }}:{{ .Env.HISAG_IP }}
+        depends_on:
+            - postgres
+        restart: always
+    {{ end }}
+    {{ if .Env.HAPI_WAR_NAME }}
+    hapi:
+        container_name: hapi
+        build:
+            context: hispy-hapify/.
+            dockerfile: Dockerfile
+        environment:
+            - TZ=America/Asuncion
+            - CATALINA_OPTS={{ .Env.CATALINA_OPTS }}
+        network_mode: "host"
+        volumes:
+            - ./hispy-hapify/webapps:/usr/local/tomcat/webapps:rw
+            - ./hispy-hapify/server.xml:/usr/local/tomcat/conf/server.xml:ro
+            - ./hispy-hapify/web.xml:/usr/local/tomcat/conf/web.xml:ro
+            - ./hispy-hapify/siciap.cer:/usr/local/tomcat/siciap.cer:ro
+            - hapi_logs:/usr/local/tomcat/logs:z
+        extra_hosts:
+            - {{ .Env.HISAG_DOMAIN }}:{{ .Env.HISAG_IP }}
+        depends_on:
+            - postgres
+        restart: always
+    {{ end }}
+    postgres:
+        container_name: postgres
+        image: {{ .Env.PG_DOCKER_IMG }}
+        network_mode: "host"
+        volumes:
+            - ./postgres/config/postgresql.conf:/etc/postgresql.conf:ro
+            - ./postgres/initdb.d:/docker-entrypoint-initdb.d:ro
+            - ./postgres/bin:/var/lib/postgresql/scripts:rw
+            - ./postgres/dbbk:/db-backup
+            - hispgdata:/var/lib/postgresql/data
+            - postgres_logs:/var/lib/postgresql/logs
+        environment:
+            - TZ=America/Asuncion
+            - PGTZ=America/Asuncion
+            - POSTGRES_USER={{ .Env.DB_USER }}
+            - POSTGRES_PASSWORD={{ .Env.DB_PW }}
+            - PGPORT={{ .Env.DB_PORT }}
+        command: |
+                postgres -c config_file=/etc/postgresql.conf && \
+                /bin/bash -c "mkdir -p /var/lib/postgresql/logs && chmod -R 777 /var/lib/postgresql/logs" && \
+                /bin/bash -c "apk add age"
+        shm_size: '320mb'
+        restart: always
+
+volumes:
+    hispgdata:
+    postgres_logs:
+    interhis_apps:
+    interhis_logs:
+    interhis_images:
+    outhis_apps:
+    outhis_logs:
+    outhis_uploads:
+    hapi_logs:
+    nginx_logs:
